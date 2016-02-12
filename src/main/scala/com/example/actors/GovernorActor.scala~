@@ -14,6 +14,7 @@ class GovernorActor extends Actor {
   var wynik1 = 0.0
   val actorlist:Array[ActorRef] = new Array[ActorRef](4)
   var count:Int =0
+  override def preStart(): Unit = {
     println("rozmiar, x0, x1, step, n*array[i]")
     val rozmiar = scala.io.StdIn.readInt()
     val lista = ArrayBuffer.empty[Double]
@@ -36,6 +37,9 @@ class GovernorActor extends Actor {
     actorlist(2) ! (lista.toList, (2.0*x0+2.0*x1)/4.0, (1.0*x0+3.0*x1)/4.0, step)
     actorlist(3) ! (lista.toList, (x0+3.0*x1)/4.0, x1, step)
     println("governor_send")
+    Await.result(system.whenTerminated, Duration.Inf)
+  }
+
 
   def receive = {
     case calka:Any => {
