@@ -15,17 +15,17 @@ import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
 
 object Hello extends JFXApp {
-    val txtFieldX0= new TextField()
-    val txtFieldX1= new TextField()
-    val txtFieldStep= new TextField()
-    val txtFieldPolynomial = new TextField()
-    val resultLabel = new Label()
+    val txtFieldX0= new TextField{style = "-fx-background-color: white"}
+    val txtFieldX1= new TextField{style = "-fx-background-color: white"}
+    val txtFieldStep= new TextField{style = "-fx-background-color: white"}
+    val txtFieldPolynomial = new TextField{style = "-fx-background-color: white"}
+    val resultLabel = new Label{style = "-fx-background-color: white"}
     stage = new JFXApp.PrimaryStage {
       title.value = "Hello Stage"
       width = 600
       height = 450
       scene = new Scene {
-        fill = Color.LightGreen
+        fill = Color.rgb(100,200,150)
         //content = new Button {
         title = "Calka"
         root = new VBox {
@@ -58,7 +58,8 @@ object Hello extends JFXApp {
             new ButtonBar {
               buttons = Seq(new Button {
                 text = "Licz teraz!"
-                style = "-fx-font-size: 24pt"
+                style = "-fx-font-size: 24pt;" +
+                  "-fx-background-color: white"
                 minHeight = 30
                 minWidth = 100
                 onAction = handle {
@@ -83,10 +84,6 @@ object Hello extends JFXApp {
         val x0 = txtFieldX0.text.value.toDouble
         val x1 = txtFieldX1.text.value.toDouble
         val step = txtFieldStep.text.value.toDouble
-
-        //for (i <- 0 to rozmiar) {
-           // lista += scala.io.StdIn.readDouble()
-       // }
         val polynomial = txtFieldPolynomial.text.value.mkString.split(',').toList.map(_.toDouble)
 
         initialActor ! (x0, x1, polynomial, step)
