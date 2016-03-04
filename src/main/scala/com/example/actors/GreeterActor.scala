@@ -4,10 +4,6 @@ import akka.actor.{ActorRef, Actor, ActorLogging}
 
 
 // Note: Usually the message object (GreeterMessages) and the actor class (GreeterActor) will be called the same thing (eg. Greeter)
-object GreeterMessages {
-  case object Done
-  case object Stop
-}
 
 class GreeterActor extends Actor with ActorLogging {
   def horner(buffer: List[Double], x0:Double):Double = {

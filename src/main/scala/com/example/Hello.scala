@@ -1,9 +1,12 @@
 package com.example
 
-import com.example.actors.GovernorActor
+import akka.util.Timeout
+import akka.pattern.ask
+import com.example.actors.{Result, GovernorActor}
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.Await
+import scala.concurrent.{Future, Await}
 import scala.concurrent.duration._
+
 import akka.actor.{ActorSystem, Props}
 
 import scalafx.Includes._
@@ -75,19 +78,26 @@ object Hello extends JFXApp {
       }
     }
     def Integral_Go():Unit = {
-        val system = ActorSystem("MySystem")
-        val initialActor = system.actorOf(Props[GovernorActor], name = "governorActor")
+      val system = ActorSystem("MySystem")
+      val initialActor = system.actorOf(Props[GovernorActor], name = "governorActor")
 
-        println ("rozmiar, n*array[i]")
-        //val rozmiar = scala.io.StdIn.readInt()
-        //val lista = ArrayBuffer.empty[Double]
-        val x0 = txtFieldX0.text.value.toDouble
-        val x1 = txtFieldX1.text.value.toDouble
-        val step = txtFieldStep.text.value.toDouble
-        val polynomial = txtFieldPolynomial.text.value.mkString.split(',').toList.map(_.toDouble)
+      println ("rozmiar, n*array[i]")
+      //val rozmiar = scala.io.StdIn.readInt()
+      //val lista = ArrayBuffer.empty[Double]
+      val x0 = txtFieldX0.text.value.toDouble
+      val x1 = txtFieldX1.text.value.toDouble
+      val step = txtFieldStep.text.value.toDouble
+      val polynomial = txtFieldPolynomial.text.value.mkString.split(',').toList.map(_.toDouble)
 
-        initialActor ! (x0, x1, polynomial, step)
+      initialActor ! (x0, x1, polynomial, step)
 
-        Await.result (system.whenTerminated, Duration.Inf)
+      implicit val timeout = Timeout(20 seconds)
+      //val future: Future[Array[Int]] = ask(initialActor, Result).mapTo[Array[Int]]
+      val future:Future[Double] = (initialActor ? Result).mapTo[Double]
+      val result = Await.result(future, 10 second)
+
+      resultLabel.setText(result.toString)
+
+      Await.result (system.whenTerminated, Duration.Inf)
     }
 }
