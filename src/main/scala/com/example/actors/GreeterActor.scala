@@ -30,10 +30,10 @@ class GreeterActor extends Actor with ActorLogging {
   }
   def receive = {
     case (buffer:List[Double],x0:Double,x1:Double,step:Double) => {
-      println("recieved signal")
+      println("GreeterRecieveData")
       val wynik:Double = integral(buffer, x0, x1, step)
       sender() ! wynik
-      println("sent data " + wynik)
+      println("GreeterSendData " + wynik)
       context.stop(context.self)
     }
   }
